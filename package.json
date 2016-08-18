@@ -1,0 +1,27 @@
+{
+  "name": "gear-help",
+  "version": "1.0.0",
+  "description": "A Hubot Gear for enable help and show available commands",
+  "main": "/src/help.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubot-js/gear-help.git"
+  },
+  "keywords": [
+    "hubot-gear",
+    "hubot",
+    "slack"
+  ],
+  "author": "robsonbittencourt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hubot-js/gear-help/issues"
+  },
+  "homepage": "https://github.com/hubot-js/gear-help#readme",
+  "dependencies": {
+      
+  }
+}
