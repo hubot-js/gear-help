@@ -4,7 +4,7 @@
   "description": "A Hubot Gear for enable help and show available commands",
   "main": "/src/help.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "./node_modules/.bin/mocha --recursive --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,10 @@
   "homepage": "https://github.com/hubot-js/gear-help#readme",
   "dependencies": {
       
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "sinon": "^1.17.5",
+    "mocha": "^3.0.2"
   }
 }
