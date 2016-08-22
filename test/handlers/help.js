@@ -26,7 +26,7 @@ describe('Help ', function() {
          expect(appendSpy.calledWith('You need help? Call me in private chat.')).to.be.true;
          expect(endSpy.called).to.be.true;
 
-         expect(postMessageSpy.calledWith(message.channel, '', {as_user: true})).to.be.true;
+         expect(postMessageSpy.calledWith(message.channel, 'fakeMessage', {as_user: true})).to.be.true;
       });
       
    });   
@@ -58,7 +58,7 @@ describe('Help ', function() {
 
             expect(endSpy.callCount).to.be.equal(2);
 
-            expect(postMessageSpy.calledWith(message.user, '', {as_user: true})).to.be.true;
+            expect(postMessageSpy.calledWith(message.user, 'fakeMessage', {as_user: true})).to.be.true;
          });
 
          it("and tasks by category", function() {
@@ -80,10 +80,22 @@ describe('Help ', function() {
             expect(appendSpy.calledWith('taskDescription3')).to.be.true;
             expect(appendSpy.calledWith('taskDescription4')).to.be.true;
 
-            expect(postMessageSpy.calledWith(message.user, '', {as_user: true})).to.be.true;
+            expect(postMessageSpy.calledWith(message.user, 'fakeMessage', {as_user: true})).to.be.true;
          });
 
       });
+   });
+
+   describe('requested in a unknow source', function() {
+
+      it("do nothing", function() {
+         isUnknowSource();
+
+         help.handle(hubot, message);
+
+         expect(postMessageSpy.callCount).to.be.equal(0);
+      });
+
    });
 
    function getHubot() {
@@ -109,7 +121,7 @@ describe('Help ', function() {
 
    function getSpeech() {
       return {
-         end: function() { return '' },
+         end: function() { return 'fakeMessage' },
          bold: function() { return this },
          line: function() { return this },
          item: function() { return this },
@@ -142,6 +154,12 @@ describe('Help ', function() {
    function isPrivateConversation() {
       hubot._isChannelConversation = function () { return false };
       hubot._isPrivateConversation = function () { return true };
+      hubot.getRecipient = function() { return message.user };   
+   }
+
+   function isUnknowSource() {
+      hubot._isChannelConversation = function () { return false };
+      hubot._isPrivateConversation = function () { return false };
       hubot.getRecipient = function() { return message.user };   
    }
 

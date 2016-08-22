@@ -3,7 +3,11 @@
 exports.handle = handle;
 
 function handle(hubot, message) {
-   hubot.postMessage(hubot.getRecipient(message), getHelpMessage(hubot, message), {as_user: true});   
+   var helpMessage = getHelpMessage(hubot, message);
+   
+   if (helpMessage) {
+      hubot.postMessage(hubot.getRecipient(message), helpMessage, {as_user: true});   
+   }
 }
 
 function getHelpMessage(hubot, message) {
@@ -16,6 +20,8 @@ function getHelpMessage(hubot, message) {
    if (hubot._isPrivateConversation(message)) {
       return getPrivateHelpMessage(hubot, user);
    }
+
+   return null;
 }
 
 function getPublicHelpMessage(hubot, user) {
