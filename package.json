@@ -1,6 +1,6 @@
 {
   "name": "gear-help",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Hubot Gear for enable help and show available commands",
   "main": "/src/help.js",
   "scripts": {
