@@ -55,5 +55,5 @@ function buildTasks(hubot, speecher, category) {
 }
 
 function getTasks(hubot, category) {
-   return hubot.core.tasks.filter(t => t.category == category.key);
+   return hubot.core.tasks.filter(t => t.category === category.key);
 }
