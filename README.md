@@ -9,7 +9,7 @@ This is a gear to add to [hubot.js](https://github.com/hubot-js/hubot.js) the ab
 
 ## Usage
 
-When hubot.js starts you can ask for help. The help command will show commands from all gears.
+When hubot.js starts you can ask for help. The help command will show commands from all active gears.
 
 ```
 hubot help
