@@ -6,7 +6,7 @@ function handle(hubot, message) {
    var helpMessage = getHelpMessage(hubot, message);
    
    if (helpMessage) {
-      hubot.postMessage(hubot.getRecipient(message), helpMessage, {as_user: true});   
+      hubot.talk(message, helpMessage);   
    }
 }
 
