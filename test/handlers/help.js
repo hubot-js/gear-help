@@ -35,6 +35,16 @@ describe('Help ', function() {
 
       describe('post a message showing', function() {
 
+         it("only categories of active gears", function() {
+            isPrivateConversation();
+            withoutTasks();
+
+            help.handle(hubot, message);
+
+            expect(boldSpy.calledWith('name1')).to.be.true;
+            expect(boldSpy.neverCalledWith('category4')).to.be.true;
+         });
+
          it("only visible categories", function() {
             isPrivateConversation();
             withoutTasks();
@@ -53,7 +63,7 @@ describe('Help ', function() {
             expect(appendSpy.calledWith('description1')).to.be.true;
             expect(appendSpy.calledWith('description2')).to.be.true;
 
-            expect(boldSpy.neverCalledWith('category3')).to.be.true;
+            expect(boldSpy.neverCalledWith('name3')).to.be.true;
             expect(appendSpy.neverCalledWith('description3')).to.be.true;
 
             expect(endSpy.callCount).to.be.equal(2);
@@ -61,7 +71,7 @@ describe('Help ', function() {
             expect(talkSpy.calledWith(message, 'fakeMessage')).to.be.true;
          });
 
-         it("and tasks by category", function() {
+         it("tasks by category", function() {
             isPrivateConversation();
 
             help.handle(hubot, message);
@@ -103,19 +113,28 @@ describe('Help ', function() {
          _getUserById: function () { return message.user },
          talk: function () {},
          speech: function() { return speech },
-         core: {
-            categories: [
-               { "key": "category1", "name": "name1", "description": "description1", "visible": true },
-               { "key": "category2", "name": "name2", "description": "description2", "visible": true },
-               { "key": "category3", "name": "name3", "description": "description3", "visible": false }
-            ],
-            tasks: [
-               { "category": "category1", "trigger": "trigger1", "description": "taskDescription1" },
-               { "category": "category1", "trigger": "trigger2", "description": "taskDescription2" },
-               { "category": "category2", "trigger": "trigger3", "description": "taskDescription3"  },
-               { "category": "category2", "trigger": "trigger4", "description": "taskDescription4"  },
-            ]
-         }
+         gears: [
+            {
+               categories: [
+                  { "key": "category1", "name": "name1", "description": "description1", "visible": true },
+                  { "key": "category2", "name": "name2", "description": "description2", "visible": true },
+                  { "key": "category3", "name": "name3", "description": "description3", "visible": false }
+               ],
+               tasks: [
+                  { "category": "category1", "trigger": "trigger1", "description": "taskDescription1" },
+                  { "category": "category1", "trigger": "trigger2", "description": "taskDescription2" },
+                  { "category": "category2", "trigger": "trigger3", "description": "taskDescription3"  },
+                  { "category": "category2", "trigger": "trigger4", "description": "taskDescription4"  },
+               ],
+               active: true
+            },
+            {
+               categories: [
+                  { "key": "category4", "name": "name4", "description": "description4", "visible": true },
+               ],
+               active: false
+            }
+         ]
       };
    }
 
@@ -164,7 +183,7 @@ describe('Help ', function() {
    }
 
    function withoutTasks() {
-      hubot.core.tasks = [];
+      hubot.gears[0].tasks = [];
    }
 
 }); 
