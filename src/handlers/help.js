@@ -3,21 +3,21 @@
 exports.handle = handle;
 
 function handle(hubot, message) {
-   let helpMessage = getHelpMessage(hubot, message);
+   const helpMessage = getHelpMessage(hubot, message);
    
    if (helpMessage) {
-      hubot.talk(message, helpMessage);   
+      hubot.speak(message, helpMessage);   
    }
 }
 
 function getHelpMessage(hubot, message) {
-   let user = hubot._getUserById(message.user);
+   const user = hubot.getUser(message);
    
-   if (hubot._isChannelConversation(message)) {
+   if (hubot.isFromChannel(message)) {
       return publicHelpMessage(hubot, user);
    } 
    
-   if (hubot._isPrivateConversation(message)) {
+   if (hubot.isFromPrivate(message)) {
       return privateHelpMessage(hubot, user);
    }
 
@@ -33,7 +33,7 @@ function privateHelpMessage(hubot, user) {
 }
 
 function getHelpOptions(hubot) {
-   let speecher = hubot.speech();
+   const speecher = hubot.speech();
 
    activeGears(hubot).forEach(gear => buildCategories(gear, speecher));
 
@@ -45,7 +45,7 @@ function activeGears(hubot) {
 }
 
 function buildCategories(gear, speecher) {
-   let visibleCategories = gear.categories.filter(c => c.visible);
+   const visibleCategories = gear.categories.filter(c => c.visible);
 
    visibleCategories.forEach(function(category) {
       speecher.paragraph().bold(category.name).line().append(category.description).paragraph();

@@ -1,10 +1,10 @@
-var help = require('../../src/handlers/help');
-var chai = require("chai");
-var expect = chai.expect;
-var sinon = require('sinon');
+const help = require('../../src/handlers/help');
+const chai = require("chai");
+const expect = chai.expect;
+const sinon = require('sinon');
 
 describe('Help ', function() {
-   var message, hubot, speech, endSpy, boldSpy, lineSpy, itemSpy, helloSpy, appendSpy, separatorSpy, paragraphSpy, talkSpy;
+   let message, hubot, speech, endSpy, boldSpy, lineSpy, itemSpy, helloSpy, appendSpy, separatorSpy, paragraphSpy, speakSpy;
 
    beforeEach(function() {
       message = { "user": "hubot", "channel": "myChannel" };
@@ -26,7 +26,7 @@ describe('Help ', function() {
          expect(appendSpy.calledWith('You need help? Call me in private chat.')).to.be.true;
          expect(endSpy.called).to.be.true;
 
-         expect(talkSpy.calledWith(message, 'fakeMessage')).to.be.true;
+         expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
       });
       
    });   
@@ -68,7 +68,7 @@ describe('Help ', function() {
 
             expect(endSpy.callCount).to.be.equal(2);
 
-            expect(talkSpy.calledWith(message, 'fakeMessage')).to.be.true;
+            expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
          });
 
          it("tasks by category", function() {
@@ -90,7 +90,7 @@ describe('Help ', function() {
             expect(appendSpy.calledWith('taskDescription3')).to.be.true;
             expect(appendSpy.calledWith('taskDescription4')).to.be.true;
 
-            expect(talkSpy.calledWith(message, 'fakeMessage')).to.be.true;
+            expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
          });
 
       });
@@ -103,15 +103,15 @@ describe('Help ', function() {
 
          help.handle(hubot, message);
 
-         expect(talkSpy.callCount).to.be.equal(0);
+         expect(speakSpy.callCount).to.be.equal(0);
       });
 
    });
 
    function getHubot() {
       return { 
-         _getUserById: function () { return message.user },
-         talk: function () {},
+         getUser: function () { return message.user },
+         speak: function () {},
          speech: function() { return speech },
          gears: [
             {
@@ -161,25 +161,22 @@ describe('Help ', function() {
       separatorSpy = sinon.spy(speech, "separator");
       paragraphSpy = sinon.spy(speech, "paragraph");
       
-      talkSpy = sinon.spy(hubot, "talk");
+      speakSpy = sinon.spy(hubot, "speak");
    }
 
    function isChannelConversation() {
-      hubot._isChannelConversation = function () { return true };
-      hubot._isPrivateConversation = function () { return false };
-      hubot.getRecipient = function() { return message.channel };
+      hubot.isFromChannel = function () { return true };
+      hubot.isFromPrivate = function () { return false };
    }
 
    function isPrivateConversation() {
-      hubot._isChannelConversation = function () { return false };
-      hubot._isPrivateConversation = function () { return true };
-      hubot.getRecipient = function() { return message.user };   
+      hubot.isFromChannel = function () { return false };
+      hubot.isFromPrivate = function () { return true };
    }
 
    function isUnknowSource() {
-      hubot._isChannelConversation = function () { return false };
-      hubot._isPrivateConversation = function () { return false };
-      hubot.getRecipient = function() { return message.user };   
+      hubot.isFromChannel = function () { return false };
+      hubot.isFromPrivate = function () { return false };
    }
 
    function withoutTasks() {
