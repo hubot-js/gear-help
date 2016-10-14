@@ -3,33 +3,10 @@
 exports.handle = handle;
 
 function handle(hubot, message) {
-   const helpMessage = getHelpMessage(hubot, message);
-   
-   if (helpMessage) {
-      hubot.speak(message, helpMessage);   
-   }
-}
-
-function getHelpMessage(hubot, message) {
    const user = hubot.getUser(message);
+   const helpMessage = hubot.speech().hello(user).append('How can I help?').append(getHelpOptions(hubot)).end();
    
-   if (hubot.isFromChannel(message)) {
-      return publicHelpMessage(hubot, user);
-   } 
-   
-   if (hubot.isFromPrivate(message)) {
-      return privateHelpMessage(hubot, user);
-   }
-
-   return null;
-}
-
-function publicHelpMessage(hubot, user) {
-   return hubot.speech().hello(user).append('You need help? Call me in private chat.').end();
-}
-
-function privateHelpMessage(hubot, user) {
-   return hubot.speech().hello(user).append('How can I help?').append(getHelpOptions(hubot)).end();
+   hubot.speak(message, helpMessage);
 }
 
 function getHelpOptions(hubot) {

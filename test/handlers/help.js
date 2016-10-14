@@ -3,7 +3,7 @@ const chai = require("chai");
 const expect = chai.expect;
 const sinon = require('sinon');
 
-describe('Help ', function() {
+describe('Help post a message showing', function() {
    let message, hubot, speech, endSpy, boldSpy, lineSpy, itemSpy, helloSpy, appendSpy, separatorSpy, paragraphSpy, speakSpy;
 
    beforeEach(function() {
@@ -14,98 +14,63 @@ describe('Help ', function() {
 
       initSpies();
    });
+   
+   it("only categories of active gears", function() {
+      isPrivateConversation();
+      withoutTasks();
 
-   describe('requested in a channel', function() {
+      help.handle(hubot, message);
 
-      it("post a message saying that assistance should be requested in private", function() {
-         isChannelConversation();
-
-         help.handle(hubot, message);
-
-         expect(helloSpy.calledWith(message.user)).to.be.true;
-         expect(appendSpy.calledWith('You need help? Call me in private chat.')).to.be.true;
-         expect(endSpy.called).to.be.true;
-
-         expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
-      });
-      
-   });   
-
-   describe('requested in privated', function() {
-
-      describe('post a message showing', function() {
-
-         it("only categories of active gears", function() {
-            isPrivateConversation();
-            withoutTasks();
-
-            help.handle(hubot, message);
-
-            expect(boldSpy.calledWith('name1')).to.be.true;
-            expect(boldSpy.neverCalledWith('category4')).to.be.true;
-         });
-
-         it("only visible categories", function() {
-            isPrivateConversation();
-            withoutTasks();
-
-            help.handle(hubot, message);
-
-            expect(helloSpy.withArgs(message.user).calledOnce).to.be.true;
-            expect(appendSpy.withArgs('How can I help?').calledOnce).to.be.true;
-
-            expect(paragraphSpy.callCount).to.be.equal(4);
-            expect(lineSpy.callCount).to.be.equal(2);
-            
-            expect(boldSpy.calledWith('name1')).to.be.true;
-            expect(boldSpy.calledWith('name2')).to.be.true;
-            
-            expect(appendSpy.calledWith('description1')).to.be.true;
-            expect(appendSpy.calledWith('description2')).to.be.true;
-
-            expect(boldSpy.neverCalledWith('name3')).to.be.true;
-            expect(appendSpy.neverCalledWith('description3')).to.be.true;
-
-            expect(endSpy.callCount).to.be.equal(2);
-
-            expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
-         });
-
-         it("tasks by category", function() {
-            isPrivateConversation();
-
-            help.handle(hubot, message);
-
-            expect(itemSpy.callCount).to.be.equal(4);
-            expect(separatorSpy.callCount).to.be.equal(4);
-            expect(lineSpy.callCount).to.be.equal(6);
-
-            expect(boldSpy.calledWith('trigger1')).to.be.true;
-            expect(boldSpy.calledWith('trigger2')).to.be.true;
-            expect(boldSpy.calledWith('trigger3')).to.be.true;
-            expect(boldSpy.calledWith('trigger4')).to.be.true;
-
-            expect(appendSpy.calledWith('taskDescription1')).to.be.true;
-            expect(appendSpy.calledWith('taskDescription2')).to.be.true;
-            expect(appendSpy.calledWith('taskDescription3')).to.be.true;
-            expect(appendSpy.calledWith('taskDescription4')).to.be.true;
-
-            expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
-         });
-
-      });
+      expect(boldSpy.calledWith('name1')).to.be.true;
+      expect(boldSpy.neverCalledWith('category4')).to.be.true;
    });
 
-   describe('requested in a unknow source', function() {
+   it("only visible categories", function() {
+      isPrivateConversation();
+      withoutTasks();
 
-      it("do nothing", function() {
-         isUnknowSource();
+      help.handle(hubot, message);
 
-         help.handle(hubot, message);
+      expect(helloSpy.withArgs(message.user).calledOnce).to.be.true;
+      expect(appendSpy.withArgs('How can I help?').calledOnce).to.be.true;
 
-         expect(speakSpy.callCount).to.be.equal(0);
-      });
+      expect(paragraphSpy.callCount).to.be.equal(4);
+      expect(lineSpy.callCount).to.be.equal(2);
+      
+      expect(boldSpy.calledWith('name1')).to.be.true;
+      expect(boldSpy.calledWith('name2')).to.be.true;
+      
+      expect(appendSpy.calledWith('description1')).to.be.true;
+      expect(appendSpy.calledWith('description2')).to.be.true;
 
+      expect(boldSpy.neverCalledWith('name3')).to.be.true;
+      expect(appendSpy.neverCalledWith('description3')).to.be.true;
+
+      expect(endSpy.callCount).to.be.equal(2);
+
+      expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
+   });
+
+   it("tasks by category", function() {
+      isPrivateConversation();
+
+      help.handle(hubot, message);
+
+      expect(itemSpy.callCount).to.be.equal(4);
+      expect(separatorSpy.callCount).to.be.equal(4);
+      expect(lineSpy.callCount).to.be.equal(6);
+
+      expect(boldSpy.calledWith('trigger1')).to.be.true;
+      expect(boldSpy.calledWith('trigger2')).to.be.true;
+      expect(boldSpy.calledWith('trigger3')).to.be.true;
+      expect(boldSpy.calledWith('trigger4')).to.be.true;
+
+      expect(appendSpy.calledWith('taskDescription1')).to.be.true;
+      expect(appendSpy.calledWith('taskDescription2')).to.be.true;
+      expect(appendSpy.calledWith('taskDescription3')).to.be.true;
+      expect(appendSpy.calledWith('taskDescription4')).to.be.true;
+
+      expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
    });
 
    function getHubot() {
