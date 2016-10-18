@@ -5,7 +5,8 @@
   "main": "/src/help.js",
   "scripts": {
     "test": "istanbul cover --include-all-sources _mocha -- --recursive --reporter spec",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,11 @@
     "sinon": "^1.17.5",
     "mocha": "^3.0.2",
     "istanbul": "^0.4.4",
-    "coveralls": "^2.11.12"
+    "coveralls": "^2.11.12",
+    "eslint": "^3.8.0",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1"
   }
 }
