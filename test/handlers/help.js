@@ -1,170 +1,148 @@
-var help = require('../../src/handlers/help');
-var chai = require("chai");
-var expect = chai.expect;
-var sinon = require('sinon');
+/* eslint-disable no-unused-expressions */
 
-describe('Help ', function() {
-   var message, hubot, speech, endSpy, boldSpy, lineSpy, itemSpy, helloSpy, appendSpy, separatorSpy, paragraphSpy, postMessageSpy;
+'use strict';
 
-   beforeEach(function() {
-      message = { "user": "hubot", "channel": "myChannel" };
-      
-      hubot = getHubot();
-      speech = getSpeech();
+const chai = require('chai');
+const sinon = require('sinon');
 
-      initSpies();
-   });
+const help = require('../../src/handlers/help');
 
-   describe('requested in a channel', function() {
+const expect = chai.expect;
 
-      it("post a message saying that assistance should be requested in private", function() {
-         isChannelConversation();
+describe('Help post a message showing', () => {
+  let message;
+  let hubot;
+  let speech;
+  let endSpy;
+  let boldSpy;
+  let lineSpy;
+  let itemSpy;
+  let helloSpy;
+  let appendSpy;
+  let separatorSpy;
+  let paragraphSpy;
+  let speakSpy;
 
-         help.handle(hubot, message);
+  beforeEach(() => {
+    message = { user: 'hubot', channel: 'myChannel' };
 
-         expect(helloSpy.calledWith(message.user)).to.be.true;
-         expect(appendSpy.calledWith('You need help? Call me in private chat.')).to.be.true;
-         expect(endSpy.called).to.be.true;
+    hubot = getHubot();
+    speech = getSpeech();
 
-         expect(postMessageSpy.calledWith(message.channel, 'fakeMessage', {as_user: true})).to.be.true;
-      });
-      
-   });   
+    initSpies();
+  });
 
-   describe('requested in privated', function() {
+  it('only categories of active gears', () => {
+    withoutTasks();
 
-      describe('post a message showing', function() {
+    help.handle(hubot, message);
 
-         it("only visible categories", function() {
-            isPrivateConversation();
-            withoutTasks();
+    expect(boldSpy.calledWith('name1')).to.be.true;
+    expect(boldSpy.neverCalledWith('category4')).to.be.true;
+  });
 
-            help.handle(hubot, message);
+  it('only visible categories', () => {
+    withoutTasks();
 
-            expect(helloSpy.withArgs(message.user).calledOnce).to.be.true;
-            expect(appendSpy.withArgs('How can I help?').calledOnce).to.be.true;
+    help.handle(hubot, message);
 
-            expect(paragraphSpy.callCount).to.be.equal(4);
-            expect(lineSpy.callCount).to.be.equal(2);
-            
-            expect(boldSpy.calledWith('name1')).to.be.true;
-            expect(boldSpy.calledWith('name2')).to.be.true;
-            
-            expect(appendSpy.calledWith('description1')).to.be.true;
-            expect(appendSpy.calledWith('description2')).to.be.true;
+    expect(helloSpy.withArgs(message.user).calledOnce).to.be.true;
+    expect(appendSpy.withArgs('How can I help?').calledOnce).to.be.true;
 
-            expect(boldSpy.neverCalledWith('category3')).to.be.true;
-            expect(appendSpy.neverCalledWith('description3')).to.be.true;
+    expect(paragraphSpy.callCount).to.be.equal(4);
+    expect(lineSpy.callCount).to.be.equal(2);
 
-            expect(endSpy.callCount).to.be.equal(2);
+    expect(boldSpy.calledWith('name1')).to.be.true;
+    expect(boldSpy.calledWith('name2')).to.be.true;
 
-            expect(postMessageSpy.calledWith(message.user, 'fakeMessage', {as_user: true})).to.be.true;
-         });
+    expect(appendSpy.calledWith('description1')).to.be.true;
+    expect(appendSpy.calledWith('description2')).to.be.true;
 
-         it("and tasks by category", function() {
-            isPrivateConversation();
+    expect(boldSpy.neverCalledWith('name3')).to.be.true;
+    expect(appendSpy.neverCalledWith('description3')).to.be.true;
 
-            help.handle(hubot, message);
+    expect(endSpy.callCount).to.be.equal(2);
 
-            expect(itemSpy.callCount).to.be.equal(4);
-            expect(separatorSpy.callCount).to.be.equal(4);
-            expect(lineSpy.callCount).to.be.equal(6);
+    expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
+  });
 
-            expect(boldSpy.calledWith('trigger1')).to.be.true;
-            expect(boldSpy.calledWith('trigger2')).to.be.true;
-            expect(boldSpy.calledWith('trigger3')).to.be.true;
-            expect(boldSpy.calledWith('trigger4')).to.be.true;
+  it('tasks by category', () => {
+    help.handle(hubot, message);
 
-            expect(appendSpy.calledWith('taskDescription1')).to.be.true;
-            expect(appendSpy.calledWith('taskDescription2')).to.be.true;
-            expect(appendSpy.calledWith('taskDescription3')).to.be.true;
-            expect(appendSpy.calledWith('taskDescription4')).to.be.true;
+    expect(itemSpy.callCount).to.be.equal(4);
+    expect(separatorSpy.callCount).to.be.equal(4);
+    expect(lineSpy.callCount).to.be.equal(6);
 
-            expect(postMessageSpy.calledWith(message.user, 'fakeMessage', {as_user: true})).to.be.true;
-         });
+    expect(boldSpy.calledWith('trigger1')).to.be.true;
+    expect(boldSpy.calledWith('trigger2')).to.be.true;
+    expect(boldSpy.calledWith('trigger3')).to.be.true;
+    expect(boldSpy.calledWith('trigger4')).to.be.true;
 
-      });
-   });
+    expect(appendSpy.calledWith('taskDescription1')).to.be.true;
+    expect(appendSpy.calledWith('taskDescription2')).to.be.true;
+    expect(appendSpy.calledWith('taskDescription3')).to.be.true;
+    expect(appendSpy.calledWith('taskDescription4')).to.be.true;
 
-   describe('requested in a unknow source', function() {
+    expect(speakSpy.calledWith(message, 'fakeMessage')).to.be.true;
+  });
 
-      it("do nothing", function() {
-         isUnknowSource();
+  function getHubot() {
+    return {
+      getUser () { return message.user; },
+      speak () {},
+      speech() { return speech; },
+      gears: [
+        {
+          categories: [
+                  { key: 'category1', name: 'name1', description: 'description1', visible: true },
+                  { key: 'category2', name: 'name2', description: 'description2', visible: true },
+                  { key: 'category3', name: 'name3', description: 'description3', visible: false }
+          ],
+          tasks: [
+                  { category: 'category1', trigger: 'trigger1', description: 'taskDescription1' },
+                  { category: 'category1', trigger: 'trigger2', description: 'taskDescription2' },
+                  { category: 'category2', trigger: 'trigger3', description: 'taskDescription3' },
+                  { category: 'category2', trigger: 'trigger4', description: 'taskDescription4' }
+          ],
+          active: true
+        },
+        {
+          categories: [
+                  { key: 'category4', name: 'name4', description: 'description4', visible: true }
+          ],
+          active: false
+        }
+      ]
+    };
+  }
 
-         help.handle(hubot, message);
+  function getSpeech() {
+    return {
+      end() { return 'fakeMessage'; },
+      bold() { return this; },
+      line() { return this; },
+      item() { return this; },
+      hello() { return this; },
+      append() { return this; },
+      separator() { return this; },
+      paragraph() { return this; }
+    };
+  }
 
-         expect(postMessageSpy.callCount).to.be.equal(0);
-      });
+  function initSpies() {
+    endSpy = sinon.spy(speech, 'end');
+    boldSpy = sinon.spy(speech, 'bold');
+    lineSpy = sinon.spy(speech, 'line');
+    itemSpy = sinon.spy(speech, 'item');
+    helloSpy = sinon.spy(speech, 'hello');
+    appendSpy = sinon.spy(speech, 'append');
+    separatorSpy = sinon.spy(speech, 'separator');
+    paragraphSpy = sinon.spy(speech, 'paragraph');
 
-   });
+    speakSpy = sinon.spy(hubot, 'speak');
+  }
 
-   function getHubot() {
-      return { 
-         _getUserById: function () { return message.user },
-         postMessage: function () {},
-         speech: function() { return speech },
-         core: {
-            categories: [
-               { "key": "category1", "name": "name1", "description": "description1", "visible": true },
-               { "key": "category2", "name": "name2", "description": "description2", "visible": true },
-               { "key": "category3", "name": "name3", "description": "description3", "visible": false }
-            ],
-            tasks: [
-               { "category": "category1", "trigger": "trigger1", "description": "taskDescription1" },
-               { "category": "category1", "trigger": "trigger2", "description": "taskDescription2" },
-               { "category": "category2", "trigger": "trigger3", "description": "taskDescription3"  },
-               { "category": "category2", "trigger": "trigger4", "description": "taskDescription4"  },
-            ]
-         }
-      };
-   }
-
-   function getSpeech() {
-      return {
-         end: function() { return 'fakeMessage' },
-         bold: function() { return this },
-         line: function() { return this },
-         item: function() { return this },
-         hello: function() { return this },
-         append: function() { return this },
-         separator: function() { return this },
-         paragraph: function() { return this }
-      }
-   }
-
-   function initSpies() {
-      endSpy = sinon.spy(speech, "end");
-      boldSpy = sinon.spy(speech, "bold");
-      lineSpy = sinon.spy(speech, "line");
-      itemSpy = sinon.spy(speech, "item");
-      helloSpy = sinon.spy(speech, "hello");
-      appendSpy = sinon.spy(speech, "append");
-      separatorSpy = sinon.spy(speech, "separator");
-      paragraphSpy = sinon.spy(speech, "paragraph");
-      
-      postMessageSpy = sinon.spy(hubot, "postMessage");
-   }
-
-   function isChannelConversation() {
-      hubot._isChannelConversation = function () { return true };
-      hubot._isPrivateConversation = function () { return false };
-      hubot.getRecipient = function() { return message.channel };
-   }
-
-   function isPrivateConversation() {
-      hubot._isChannelConversation = function () { return false };
-      hubot._isPrivateConversation = function () { return true };
-      hubot.getRecipient = function() { return message.user };   
-   }
-
-   function isUnknowSource() {
-      hubot._isChannelConversation = function () { return false };
-      hubot._isPrivateConversation = function () { return false };
-      hubot.getRecipient = function() { return message.user };   
-   }
-
-   function withoutTasks() {
-      hubot.core.tasks = [];
-   }
-
-}); 
+  function withoutTasks() {
+    hubot.gears[0].tasks = [];
+  }
+});

@@ -5,21 +5,21 @@
 
 This is a gear to add to [hubot.js](https://github.com/hubot-js/hubot.js) the ability to show help with available commands. If you do not know the hubot.js or do not know what they are gears like this [click here](https://github.com/hubot-js/hubot.js/blob/master/README.md) for more details.
 
-![hubot-help-gif](https://s14.postimg.org/y7t4fpbhd/help.gif)
+![hubot-help-gif](media/help.gif)
 
 ## Usage
 
-When hubot.js starts you can ask for help. The help command will show commands from all gears.
+When hubot.js starts you can ask for help. The help command will show commands from all active gears.
 
 ```
 hubot help
 ```
 
-![hubot-private-help](https://s14.postimg.org/h5uq9b1xd/Screenshot_from_2016_08_27_14_47_19.png)
+![hubot-private-help](media/help.png)
 
 Help should be asked directly to the hubot. If you ask help in channel, will receive a warning.
 
-![hubot-public-help](https://s21.postimg.org/8kgqaadvb/public_help.png)
+![hubot-public-help](media/private-help.png)
 
 ## Development setup
 - Fork and clone this project
@@ -32,4 +32,4 @@ Robson Bittencourt - @rluizv - robson.luizv@gmail.com
 
 Distributed under the MIT license. See [LICENSE](LICENSE) for more information.
 
-https://github.com/robsonbittencourt/gear-help
+https://github.com/hubot-js/gear-help
