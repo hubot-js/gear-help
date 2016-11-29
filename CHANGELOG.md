@@ -1,4 +1,10 @@
 
+# [v2.0.0](https://github.com/hubot-js/gear-help/releases/tag/2.0.0) (2016-11-29)
+
+### Features
+
+* display only active gears when running help comand ([6dfcb1c](https://github.com/hubot-js/gear-help/commit/6dfcb1c)), close [#7](https://github.com/hubot-js/gear-help/issues/7)
+
 # [v1.0.1](https://github.com/hubot-js/gear-help/releases/tag/1.0.1) (2016-08-27)
 
 ### Features
