@@ -6,8 +6,7 @@ engines:
       languages:
          javascript:
             mass_threshold: 70
-  eslint:
-    enabled: true
+     
   fixme:
     enabled: true
 ratings:
