@@ -47,7 +47,7 @@ describe('Help post a message showing', () => {
     help.handle(hubot, message);
 
     expect(helloSpy.withArgs(message.user).calledOnce).to.be.true;
-    expect(appendSpy.withArgs('How can I help?').calledOnce).to.be.true;
+    expect(appendSpy.withArgs('gear-help:help').calledOnce).to.be.true;
 
     expect(paragraphSpy.callCount).to.be.equal(4);
     expect(lineSpy.callCount).to.be.equal(2);
