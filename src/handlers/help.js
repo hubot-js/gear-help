@@ -4,7 +4,7 @@ exports.handle = handle;
 
 function handle(hubot, message) {
   const user = hubot.getUser(message);
-  const helpMessage = hubot.speech().hello(user).append('gear-help:help').append(getHelpOptions(hubot)).end();
+  const helpMessage = hubot.speech().hello(user).append('help:help').append(getHelpOptions(hubot)).end();
 
   hubot.speak(message, helpMessage);
 }

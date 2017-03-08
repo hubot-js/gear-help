@@ -1,7 +1,7 @@
 [
    {
       "handler": "help",
-      "trigger": "hubot help",
+      "trigger": "help:trigger.help",
       "onlyInPrivate": true
    }
 ]
