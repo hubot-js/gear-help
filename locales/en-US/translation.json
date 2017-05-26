@@ -1,6 +1,6 @@
 {
   "help": "How can I help?",
   "trigger": {
-    "help": "hubot help"
+    "help": "help"
   }
 }
